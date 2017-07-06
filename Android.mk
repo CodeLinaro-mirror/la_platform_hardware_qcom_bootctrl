@@ -8,7 +8,5 @@ LOCAL_SHARED_LIBRARIES += liblog librecovery_updater_msm libcutils
 LOCAL_SRC_FILES := boot_control.cpp
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE := bootctrl.$(TARGET_BOARD_PLATFORM)
-LOCAL_MODULE_OWNER := qti
-LOCAL_VENDOR_MODULE := true
 include $(BUILD_SHARED_LIBRARY)
 endif
