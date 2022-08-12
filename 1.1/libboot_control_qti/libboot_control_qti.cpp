@@ -784,9 +784,10 @@ int is_slot_marked_successful(unsigned slot)
 		}
 		auto merge_status = get_snapshot_merge_status();
 		if ((slot == 0) && (boot_verify.reserved[3] == 'y')) {
-			if (merge_status != MergeStatus::NONE)
+			if (merge_status != MergeStatus::NONE) {
 				boot_verify.reserved[2] = 'n';
 				boot_verify.reserved[3] = 'n';
+			}
 			if (!write_bootloader_message_to(boot_verify, misc_blk_device, &err)) {
 				ALOGE("Failed to write to %s  because : %s", misc_blk_device.c_str(), err.c_str());
 				return -1;
@@ -795,9 +796,10 @@ int is_slot_marked_successful(unsigned slot)
 			return 1;
 		}
 		if ((slot == 1) && (boot_verify.reserved[5] == 'y')) {
-			if (merge_status != MergeStatus::NONE)
+			if (merge_status != MergeStatus::NONE) {
 				boot_verify.reserved[2] = 'n';
 				boot_verify.reserved[5] = 'n';
+			}
 			if (!write_bootloader_message_to(boot_verify, misc_blk_device, &err)) {
 				ALOGE("Failed to write to %s  because : %s", misc_blk_device.c_str(), err.c_str());
 				return -1;
