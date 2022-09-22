@@ -782,11 +782,26 @@ int is_slot_marked_successful(unsigned slot)
 			ALOGE("Failed to read from %s due to %s ", misc_blk_device.c_str(), err.c_str());
 			return -1;
 		}
+		auto merge_status = get_snapshot_merge_status();
 		if ((slot == 0) && (boot_verify.reserved[3] == 'y')) {
+			if (merge_status != MergeStatus::NONE)
+				boot_verify.reserved[2] = 'n';
+				boot_verify.reserved[3] = 'n';
+			if (!write_bootloader_message_to(boot_verify, misc_blk_device, &err)) {
+				ALOGE("Failed to write to %s  because : %s", misc_blk_device.c_str(), err.c_str());
+				return -1;
+			}
 			ALOGV("slot=0 and is_slot_marked_successful = y");
 			return 1;
 		}
 		if ((slot == 1) && (boot_verify.reserved[5] == 'y')) {
+			if (merge_status != MergeStatus::NONE)
+				boot_verify.reserved[2] = 'n';
+				boot_verify.reserved[5] = 'n';
+			if (!write_bootloader_message_to(boot_verify, misc_blk_device, &err)) {
+				ALOGE("Failed to write to %s  because : %s", misc_blk_device.c_str(), err.c_str());
+				return -1;
+			}
 			ALOGV("slot=1 and is_slot_marked_successful = y");
 			return 1;
 		}
@@ -818,6 +833,13 @@ bool set_snapshot_merge_status(MergeStatus status)
 	bool retval = SetMiscVirtualAbMergeStatus(get_current_slot(), status);
 	ALOGI("%s: MergeStatus = %d, current_slot = %d, returning: %s \n", __func__,
 			status, get_current_slot(), retval ? "true" : "false");
+        switch (status) {
+            case MergeStatus::NONE:
+                mark_boot_successful();
+                break;
+            default:
+                break;
+        }
 	return retval;
 }
 
