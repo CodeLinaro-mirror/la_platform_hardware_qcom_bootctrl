@@ -783,7 +783,7 @@ int is_slot_marked_successful(unsigned slot)
 			return -1;
 		}
 		auto merge_status = get_snapshot_merge_status();
-		if ((slot == 0) && (boot_verify.reserved[3] == 'y')) {
+		if ((slot == 0) && (boot_verify.reserved[3] == 'y') && (boot_verify.reserved[2] == 'y')) {
 			if (merge_status != MergeStatus::NONE) {
 				boot_verify.reserved[2] = 'n';
 				boot_verify.reserved[3] = 'n';
@@ -795,7 +795,7 @@ int is_slot_marked_successful(unsigned slot)
 			ALOGV("slot=0 and is_slot_marked_successful = y");
 			return 1;
 		}
-		if ((slot == 1) && (boot_verify.reserved[5] == 'y')) {
+		if ((slot == 1) && (boot_verify.reserved[5] == 'y') && (boot_verify.reserved[2] == 'y')) {
 			if (merge_status != MergeStatus::NONE) {
 				boot_verify.reserved[2] = 'n';
 				boot_verify.reserved[5] = 'n';
