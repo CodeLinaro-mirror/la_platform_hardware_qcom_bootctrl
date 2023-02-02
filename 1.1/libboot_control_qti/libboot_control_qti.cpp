@@ -56,7 +56,8 @@
 #define LUN_NAME_END_LOC 14
 #define BOOT_SLOT_PROP "ro.boot.slot_suffix"
 #define VENDOR_BOOTCTRL_ENABLE  "ro.vendor.bootctrl.enable"
-#define BOARD_PLATFORM_PROP  "ro.build.product"
+#define BOARD_PLATFORM_PROP  "ro.board.platform"
+#define BOARD_SUFFIX_PROP    "ro.vendor.board.suffix"
 #define GVMQ_PLATFORM        "msmnile_gvmq"
 
 #define SLOT_ACTIVE 1
@@ -427,9 +428,12 @@ error:
 
 bool bootcontrol_init()
 {
-	char platform[256], vendorBootctrl[256];
+	char platform[256], vendorBootctrl[256], suffix[256];
 	property_get(BOARD_PLATFORM_PROP , platform, "");
+	property_get(BOARD_SUFFIX_PROP , suffix, "");
 	property_get(VENDOR_BOOTCTRL_ENABLE , vendorBootctrl, "");
+	strlcat(platform, suffix, sizeof(platform));
+
 	if ((!strncmp(platform, GVMQ_PLATFORM, strlen(GVMQ_PLATFORM))) || (!strncmp(vendorBootctrl, "true", strlen("true"))))
 		mGvmqPlatform = true;
 	return InitMiscVirtualAbMessageIfNeeded();
