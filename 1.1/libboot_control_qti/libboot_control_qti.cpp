@@ -56,9 +56,6 @@
 #define LUN_NAME_END_LOC 14
 #define BOOT_SLOT_PROP "ro.boot.slot_suffix"
 #define VENDOR_BOOTCTRL_ENABLE  "ro.vendor.bootctrl.enable"
-#define BOARD_PLATFORM_PROP  "ro.build.platform"
-#define BOARD_SUFFIX_PROP    "ro.vendor.board.suffix"
-#define GVMQ_PLATFORM        "msmnile_gvmq"
 
 #define SLOT_ACTIVE 1
 #define SLOT_INACTIVE 2
@@ -427,14 +424,10 @@ error:
 
 bool bootcontrol_init()
 {
-	char platform[256], vendorBootctrl[256], suffix[256];
-	property_get(BOARD_PLATFORM_PROP , platform, "");
-        property_get(BOARD_SUFFIX_PROP , suffix, "");
+	char vendorBootctrl[256];
 	property_get(VENDOR_BOOTCTRL_ENABLE , vendorBootctrl, "");
-	std::string platform_str(platform);
 	std::string vendorBootctrl_str(vendorBootctrl);
-        strlcat(platform, suffix, sizeof(platform));
-	if (platform_str.compare(GVMQ_PLATFORM) == 0 || vendorBootctrl_str.compare("true") == 0) {
+	if (vendorBootctrl_str.compare("true") == 0) {
 		mGvmqPlatform = true;
 		ALOGD("Its gvmq");
 	}
