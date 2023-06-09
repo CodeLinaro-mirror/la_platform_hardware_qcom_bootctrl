@@ -59,6 +59,7 @@
 #define BOARD_PLATFORM_PROP  "ro.board.platform"
 #define BOARD_SUFFIX_PROP    "ro.vendor.board.suffix"
 #define GVMQ_PLATFORM        "msmnile_gvmq"
+#define GVMQKM4_PLATFORM     "msmnile_gvmq_km4"
 
 #define SLOT_ACTIVE 1
 #define SLOT_INACTIVE 2
@@ -434,7 +435,7 @@ bool bootcontrol_init()
 	property_get(VENDOR_BOOTCTRL_ENABLE , vendorBootctrl, "");
 	strlcat(platform, suffix, sizeof(platform));
 
-	if ((!strncmp(platform, GVMQ_PLATFORM, strlen(GVMQ_PLATFORM))) || (!strncmp(vendorBootctrl, "true", strlen("true"))))
+	if ((!strncmp(platform, GVMQ_PLATFORM, strlen(GVMQ_PLATFORM))) || (!strncmp(platform, GVMQKM4_PLATFORM, strlen(GVMQKM4_PLATFORM))) || (!strncmp(vendorBootctrl, "true", strlen("true"))))
 		mGvmqPlatform = true;
 	return InitMiscVirtualAbMessageIfNeeded();
 }
