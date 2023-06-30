@@ -782,11 +782,11 @@ int is_slot_marked_successful(unsigned slot)
 		ALOGE("Failed to read from %s due to %s ", misc_blk_device.c_str(), err.c_str());
 		return -1;
 	}
-	if ((slot == 0) && (boot_verify.reserved[3] == 'y')) {
+	if ((slot == 0) && (boot_verify.reserved[3] == 'y') && (boot_verify.reserved[2] == 'y')) {
 		ALOGV("slot=0 and is_slot_marked_successful = y");
 		return 1;
 	}
-	if ((slot == 1) && (boot_verify.reserved[5] == 'y')) {
+	if ((slot == 1) && (boot_verify.reserved[5] == 'y') && (boot_verify.reserved[2] == 'y')) {
 		ALOGV("slot=1 and is_slot_marked_successful = y");
 		return 1;
 	}
