@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
 cc_defaults {
     name: "android.hardware.boot-service.qti.common",
     relative_install_path: "hw",
@@ -23,8 +22,8 @@ cc_defaults {
         "libboot_control_qti",
         "libbase",
         "libbinder_ndk",
-        "android.hardware.boot@1.1",
         "android.hardware.boot-V1-ndk",
+        "android.hardware.boot@1.1",
     ],
     static_libs: [
         "libboot_control",
