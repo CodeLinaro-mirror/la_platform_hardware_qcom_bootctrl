@@ -512,6 +512,22 @@ int mark_boot_successful(){
 			return -1;
 		}
 		ALOGV(" bootloader_message is : boot.reserved[0] = %c, boot.reserved[1] = %c boot.reserved[2] = %c, boot.reserved[3] = %c boot.reserved[4] = %c, boot.reserved[5] = %c boot.reserved[6] = %c", boot.reserved[0], boot.reserved[1], boot.reserved[2], boot.reserved[3], boot.reserved[4], boot.reserved[5], boot.reserved[6]);
+
+
+               unsigned current_slot = get_current_slot();
+               uint32_t num_slots = get_number_slots();
+                 if ((num_slots < 1) || (current_slot > num_slots - 1)) {
+                         ALOGE("Invalid slot number");
+                         return -1;
+                 }
+                 if (current_slot == 0) {
+                        boot.reserved[0] = 'a';
+                        boot.reserved[1] = 'a';
+                 } else if (current_slot == 1) {
+                       boot.reserved[0] = 'b';
+                       boot.reserved[1] = 'b';
+                 }
+
 		if (cur_slot == 0) {
 			ALOGV("slot=0 and mark_boot_successful reserved[2] = y");
 			boot.reserved[3] = 'y';
