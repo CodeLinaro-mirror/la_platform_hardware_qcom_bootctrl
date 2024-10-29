@@ -617,14 +617,14 @@ int set_active_boot_slot(unsigned slot)
 	//actual names. To do this we append the slot suffix to every member
 	//in the list.
 	for (i = 0; i < ARRAY_SIZE(ptn_list); i++) {
-		//XBL, XBL_CFG, MULTIIMGOEM, MULTIIMGQTI, SHRM are handled differrently
+		//XBL, XBL_BKUP, XBL_CFG, MULTIIMGQTI, SHRM are handled differrently
                //for ufs devices so ignore them.
 		if (is_ufs && (!strncmp(ptn_list[i],PTN_XBL,strlen(ptn_list[i]))
+                    || !strncmp(ptn_list[i],PTN_XBL_BKUP,strlen(ptn_list[i]))
 		    || !strncmp(ptn_list[i],PTN_XBL_CFG,strlen(ptn_list[i]))
 #ifdef BOOTCTL_SKIP_SHRM_PTN_CHECK
                     || !strncmp(ptn_list[i],PTN_SHRM,strlen(ptn_list[i]))
 #endif
-                    || !strncmp(ptn_list[i],PTN_MULTIIMGOEM,strlen(ptn_list[i]))
                     || !strncmp(ptn_list[i],PTN_MULTIIMGQTI,strlen(ptn_list[i]))))
 				continue;
 		//The partition list will be the list of _a partitions
