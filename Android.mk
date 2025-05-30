@@ -1,3 +1,4 @@
+ifeq ($(TARGET_BOARD_PLATFORM), monaco)
 ifeq ($(AB_OTA_UPDATER),true)
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
@@ -20,3 +21,4 @@ LOCAL_MODULE := bootctrl.$(TARGET_BOARD_PLATFORM)
 include $(BUILD_STATIC_LIBRARY)
 
 endif
+endif #TARGET_BOARD_PLATFORM
