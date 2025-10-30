@@ -299,6 +299,10 @@ static int boot_ctl_set_active_slot_for_partitions(vector<string> part_list,
 	char slotB[MAX_GPT_NAME_SIZE + 1] = {0};
 	char active_guid[TYPE_GUID_SIZE + 1] = {0};
 	char inactive_guid[TYPE_GUID_SIZE + 1] = {0};
+	// kodiak inactive guid 77036CD4-03D5-42BB-8ED1-37E5A88BAA34
+	// in mixed endianness d46c 0377 d503 bb42 8ed1 37e5 a88b aa34
+	char kodiak_inactive_guid[TYPE_GUID_SIZE + 1] = {0xd4, 0x6c, 0x03, 0x77, 0xd5, 0x03, 0xbb, 0x42, 0x8e, 0xd1, 0x37, 0xe5, 0xa8, 0x8b, 0xaa, 0x34, '\0'};
+	char kodiak_vbmeta_system_inactive_guid[TYPE_GUID_SIZE + 1] = {0x53, 0xb8, 0x3a, 0xfe, 0x66, 0x5b, 0x4a, 0x4d, 0xbf, 0x85, 0x8d, 0x90, 0xaf, 0x1c, 0x2c, 0x4a, '\0'};
 	//Pointer to the partition entry of current 'A' partition
 	uint8_t *pentryA = NULL;
 	uint8_t *pentryA_bak = NULL;
@@ -376,6 +380,20 @@ static int boot_ctl_set_active_slot_for_partitions(vector<string> part_list,
 			ALOGE("Both A & B for %s are inactive..Aborting",
 					prefix.c_str());
 			goto error;
+		}
+		if (((strncmp(prefix.c_str(), "uefisecapp", strlen("uefisecapp")) == 0) ||
+				(strncmp(prefix.c_str(), "vendor_boot", strlen("vendor_boot")) == 0) ||
+				(strncmp(prefix.c_str(), "qweslicstore", strlen("qweslicstore")) == 0)) &&
+				(memcmp(active_guid, kodiak_inactive_guid, TYPE_GUID_SIZE) == 0)) {
+			//Rectify GUID
+			ALOGE("%s: Correcting active guid as inactive guid being used as active guid for %s",__func__, prefix.c_str());
+			memcpy((void*)active_guid, (void*)inactive_guid, TYPE_GUID_SIZE);
+			memcpy((void*)inactive_guid, (void*)kodiak_inactive_guid, TYPE_GUID_SIZE);
+		} else if ((strncmp(prefix.c_str(), "vbmeta_system", strlen("vbmeta_system")) == 0) && (memcmp(active_guid, kodiak_vbmeta_system_inactive_guid, TYPE_GUID_SIZE) == 0)) {
+			//Rectify vbmeta_system GUID
+			ALOGE("%s: Correcting active guid as inactive guid being used as active guid for %s",__func__, prefix.c_str());
+			memcpy((void*)active_guid, (void*)inactive_guid, TYPE_GUID_SIZE);
+			memcpy((void*)inactive_guid, (void*)kodiak_vbmeta_system_inactive_guid, TYPE_GUID_SIZE);
 		}
 		if (!strncmp(slot_suffix_arr[slot], AB_SLOT_A_SUFFIX,
 					strlen(AB_SLOT_A_SUFFIX))){
